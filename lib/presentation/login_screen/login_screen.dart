@@ -1,3 +1,8 @@
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jignect_app_11jan23/core/utils/progress_dialog_utils.dart';
+import 'package:jignect_app_11jan23/data/models/login/LoginResponse.dart';
+import 'package:jignect_app_11jan23/data/models/login/login_user_resp.dart';
+
 import 'bloc/login_bloc.dart';
 import 'models/login_model.dart';
 import 'package:flutter/material.dart';
@@ -56,18 +61,24 @@ class LoginScreen extends StatelessWidget {
                               SizedBox(height: 32.v),
                               _buildLoginButton(context),
                               SizedBox(height: 27.v),
-                              RichText(
-                                  text: TextSpan(children: [
-                                    TextSpan(
-                                        text: "msg_don_t_have_an_account2".tr,
-                                        style: theme.textTheme.bodyMedium),
-                                    TextSpan(text: " "),
-                                    TextSpan(
-                                        text: "lbl_sign_up".tr,
-                                        style:
-                                            CustomTextStyles.bodyMediumff004b7e)
-                                  ]),
-                                  textAlign: TextAlign.left),
+
+                              // dont have an account ? signup
+                              GestureDetector(
+                                onTap: clickSignup,
+                                child: RichText(
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                          text: "msg_don_t_have_an_account2".tr,
+                                          style: theme.textTheme.bodyMedium),
+                                      TextSpan(text: " "),
+                                      TextSpan(
+                                          text: "lbl_sign_up".tr,
+                                          style: CustomTextStyles
+                                              .bodyMediumff004b7e)
+                                    ]),
+                                    textAlign: TextAlign.left),
+                              ),
+
                               SizedBox(height: 32.v),
                               _buildRowEleven(context),
                               SizedBox(height: 28.v),
@@ -149,10 +160,10 @@ class LoginScreen extends StatelessWidget {
                           width: 22.adaptSize))),
               suffixConstraints: BoxConstraints(maxHeight: 56.v),
               validator: (value) {
-                if (value == null ||
-                    (!isValidPassword(value, isRequired: true))) {
-                  return "err_msg_please_enter_valid_password".tr;
-                }
+                // if (value == null ||
+                //     (!isValidPassword(value, isRequired: true))) {
+                //   return "err_msg_please_enter_valid_password".tr;
+                // }
                 return null;
               },
               obscureText: state.isShowPassword,
@@ -162,7 +173,38 @@ class LoginScreen extends StatelessWidget {
 
   /// Section Widget
   Widget _buildLoginButton(BuildContext context) {
-    return CustomElevatedButton(text: "lbl_login".tr);
+    return CustomElevatedButton(
+      text: "lbl_login".tr,
+      onPressed: () {
+        clickLogin(context);
+      },
+    );
+  }
+
+  void clickLogin(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      ProgressDialogUtils.showProgressDialog();
+      context.read<LoginBloc>().add(LoginApiEvent(onLoginApiSuccessEvent: () {
+            _onLoginApiSuccessEvent(context);
+          }, onLoginApiErrorEvent: () {
+            _onLoginApiErrorEvent(context);
+          }));
+    }
+  }
+
+  void _onLoginApiSuccessEvent(BuildContext context) {
+    LoginUserResp loginResponse = context.read<LoginBloc>().loginResponse;
+    Fluttertoast.showToast(msg: 'res = ' + loginResponse.message.toString());
+    if (loginResponse.status == "200") {
+      Fluttertoast.showToast(msg: loginResponse.message.toString());
+    } else {
+      Fluttertoast.showToast(msg: loginResponse.message.toString());
+    }
+  }
+
+  void _onLoginApiErrorEvent(BuildContext context) {
+    LoginUserResp loginResponse = context.read<LoginBloc>().loginResponse;
+    Fluttertoast.showToast(msg: loginResponse.message.toString());
   }
 
   /// Section Widget
@@ -247,5 +289,9 @@ class LoginScreen extends StatelessWidget {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(onError.toString())));
     });
+  }
+
+  void clickSignup() {
+    NavigatorService.pushNamed(AppRoutes.signUpScreen);
   }
 }

@@ -73,6 +73,9 @@ class IntroScreen extends StatelessWidget {
                     text: "lbl_sign_up".tr,
                     buttonStyle: CustomButtonStyles.outlineOnPrimary,
                     buttonTextStyle: CustomTextStyles.titleMediumOnPrimary,
+                    onPressed: () {
+                      NavigatorService.pushNamed(AppRoutes.signUpScreen);
+                    },
                   ),
                   SizedBox(height: 5.v),
                 ],

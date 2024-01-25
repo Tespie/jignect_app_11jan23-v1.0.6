@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:jignect_app_11jan23/core/app_export.dart';
 
@@ -9,7 +11,7 @@ class CustomTextFormField extends StatelessWidget {
     this.scrollPadding,
     this.controller,
     this.focusNode,
-    this.autofocus = true,
+    this.autofocus = false,
     this.textStyle,
     this.obscureText = false,
     this.textInputAction = TextInputAction.next,
@@ -91,7 +93,8 @@ class CustomTextFormField extends StatelessWidget {
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           controller: controller,
           focusNode: focusNode ?? FocusNode(),
-          autofocus: autofocus!,
+          // autofocus: autofocus!,
+          autofocus: autofocus ?? true,
           style: textStyle ?? theme.textTheme.bodyLarge,
           obscureText: obscureText!,
           textInputAction: textInputAction,
@@ -99,11 +102,13 @@ class CustomTextFormField extends StatelessWidget {
           maxLines: maxLines ?? 1,
           decoration: decoration,
           validator: validator,
+          cursorColor: theme.colorScheme.onPrimary,
         ),
       );
   InputDecoration get decoration => InputDecoration(
         hintText: hintText ?? "",
-        hintStyle: hintStyle ?? theme.textTheme.bodyLarge,
+        // hintStyle: hintStyle ?? theme.textTheme.bodyLarge,
+        hintStyle: hintStyle ?? CustomTextStyles.bodyLargeGray600,
         prefixIcon: prefix,
         prefixIconConstraints: prefixConstraints,
         suffixIcon: suffix,

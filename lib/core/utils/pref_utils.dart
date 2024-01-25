@@ -35,4 +35,40 @@ class PrefUtils {
       return 'primary';
     }
   }
+
+  Future<void> setUsername(String value) {
+    return _sharedPreferences!.setString('username', value);
+  }
+
+  String getUsername() {
+    try {
+      return _sharedPreferences!.getString('username') ?? '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  Future<void> setEmail(String value) {
+    return _sharedPreferences!.setString('email', value);
+  }
+
+  String getEmail() {
+    try {
+      return _sharedPreferences!.getString('email') ?? '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  Future<void> setUserid(String value) {
+    return _sharedPreferences!.setString('userid', value);
+  }
+
+  String getUserid() {
+    try {
+      return _sharedPreferences!.getString('userid') ?? '';
+    } catch (e) {
+      return '';
+    }
+  }
 }

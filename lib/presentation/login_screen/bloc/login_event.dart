@@ -26,3 +26,21 @@ class ChangePasswordVisibilityEvent extends LoginEvent {
         value,
       ];
 }
+
+// tj added
+class LoginApiEvent extends LoginEvent {
+  LoginApiEvent({
+    this.onLoginApiSuccessEvent,
+    this.onLoginApiErrorEvent,
+  });
+
+  Function? onLoginApiSuccessEvent;
+  Function? onLoginApiErrorEvent;
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+        onLoginApiSuccessEvent,
+        onLoginApiErrorEvent,
+      ];
+}
