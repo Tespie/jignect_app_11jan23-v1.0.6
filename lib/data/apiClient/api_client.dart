@@ -26,6 +26,10 @@ class ApiClient {
 
   final _dio = Dio(BaseOptions(
     connectTimeout: const Duration(seconds: 60),
+    validateStatus: (int? status) {
+      return status != null;
+      // return status != null && status >= 200 && status < 300;
+    },
   ))
     ..interceptors.add(NetworkInterceptor());
 
@@ -43,6 +47,7 @@ class ApiClient {
   bool _isSuccessCall(Response response) {
     if (response.statusCode != null) {
       return response.statusCode! >= 200 && response.statusCode! <= 299;
+      // return true;
     }
     return false;
   }
